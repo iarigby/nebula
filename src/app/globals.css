@@ -21,6 +21,14 @@ body {
   background-color: var(--background-start-rgb);
 }
 
+main {
+  width: 400px;
+  margin: auto;
+}
+
+svg {
+  display: inline;
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;

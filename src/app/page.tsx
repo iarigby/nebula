@@ -1,7 +1,10 @@
 'use client'
 
 
+import Player from "@/app/player";
 
 export default function Home() {
-  return <></>
+    return <main>
+        <Player></Player>
+    </main>
 }
