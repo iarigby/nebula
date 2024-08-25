@@ -19,10 +19,13 @@ export default function Player() {
 function ClientPlayer() {
     const playerControl = new PlayerControls();
     const [playing, setPlaying] = useState(false);
+    const [synthOptions, setSynthOptions] = useState({duration: 1})
+    const setDuration = (n: number) => setSynthOptions({duration: n})
     return <div className="h-96 w-96">
         <Wave/>
-        <AudioSource playerControl={playerControl} setPlaying={setPlaying}/>
+        <AudioSource recordingOptions={synthOptions} playerControl={playerControl} setPlaying={setPlaying}/>
         <PlayerController playerControl={playerControl} playing={playing}/>
+        <button onClick={() => setDuration(synthOptions.duration+1)}>seta: {synthOptions.duration}</button>
     </div>
 }
 
