@@ -1,5 +1,6 @@
 import * as Tone from "tone";
-import {RecordingOptions} from "@/app/audioSource";
+import {RecordingOptions} from "@/synthesizer/audio";
+
 
 export async function renderRecording(recordingOptions: RecordingOptions): Promise<Tone.ToneAudioBuffer> {
     const context = new Tone.OfflineContext(2, recordingOptions.duration, 41000)
