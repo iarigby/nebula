@@ -14,8 +14,12 @@ export function useAudio({playEventListener, pauseEventListener}: AudioProps): [
     const [audioSrc, setAudioSrc] = useState<string>();
     useEffect(() => {
         if (audioSrc) {
+            if (!audio.paused) {
+                audio.pause()
+                pauseEventListener()
+            }
             audio.src = audioSrc
         }
-    }, [audioSrc, audio])
+    }, [audioSrc, audio, pauseEventListener])
     return [audio, setAudioSrc]
 }

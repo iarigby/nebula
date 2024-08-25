@@ -1,8 +1,8 @@
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import * as Tone from "tone";
 // @ts-ignore
 import * as toWav from "audiobuffer-to-wav"
-import {AudioProps, useAudio} from "@/hooks/useAudio";
+import {useAudio} from "@/hooks/useAudio";
 import {renderRecording} from "@/synthesizer/synthesizer";
 
 
@@ -20,11 +20,9 @@ export function AudioSource({playerControl, setPlaying, recordingOptions}: {
     setPlaying: (b: boolean) => void,
     recordingOptions: RecordingOptions
 }) {
-    const audioProps: AudioProps = {
-        playEventListener: () => setPlaying(true),
-        pauseEventListener: () => setPlaying(false)
-    }
-    const [audio, setAudioSrc] = useAudio(audioProps)
+    const playEventListener = useCallback(() => setPlaying(true), [setPlaying])
+    const pauseEventListener = useCallback(() => setPlaying(false), [setPlaying])
+    const [audio, setAudioSrc] = useAudio({playEventListener, pauseEventListener})
 
     useEffect(() => {
         renderRecording(recordingOptions)
