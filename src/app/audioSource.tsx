@@ -1,8 +1,9 @@
-import { useEffect} from "react";
+import {useEffect} from "react";
 import * as Tone from "tone";
 // @ts-ignore
 import * as toWav from "audiobuffer-to-wav"
 import {AudioProps, useAudio} from "@/hooks/useAudio";
+import {renderRecording} from "@/synthesizer/synthesizer";
 
 
 export class PlayerControls {
@@ -26,8 +27,8 @@ export function AudioSource({playerControl, setPlaying, recordingOptions}: {
     const [audio, setAudioSrc] = useAudio(audioProps)
 
     useEffect(() => {
-        createAudio(recordingOptions)
-            .then(getAudioSrc)
+        renderRecording(recordingOptions)
+            .then(createAudioSrc)
             .then(setAudioSrc)
     }, [recordingOptions, setAudioSrc])
 
@@ -37,31 +38,10 @@ export function AudioSource({playerControl, setPlaying, recordingOptions}: {
     return <></>
 }
 
-function getAudioSrc(buffer: Tone.ToneAudioBuffer) {
+function createAudioSrc(buffer: Tone.ToneAudioBuffer) {
     const blobData = toWav(buffer)
     const blob = new Blob([blobData], {type: 'audio/wav'})
     return window.URL.createObjectURL(blob)
 }
 
 
-async function createAudio(recordingOptions: RecordingOptions): Promise<Tone.ToneAudioBuffer> {
-    const context = new Tone.OfflineContext(2, recordingOptions.duration, 41000)
-    Tone.setContext(context)
-    const synth = createSynth()
-    context.transport.start()
-    synth.triggerAttack()
-    return context.render()
-        .then((buffer) => {
-            context.dispose()
-            return buffer
-        }
-    )
-}
-
-
-function createSynth() {
-    const filter = new Tone.Filter(10, 'lowpass').toDestination();
-    const synth = new Tone.NoiseSynth({envelope: {sustain: 1}}).toDestination();
-    synth.connect(filter);
-    return synth
-}
