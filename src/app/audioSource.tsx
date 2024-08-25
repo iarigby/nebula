@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useEffect} from "react";
 import * as Tone from "tone";
 // @ts-ignore
 import * as toWav from "audiobuffer-to-wav"
@@ -24,9 +24,11 @@ export function AudioSource({playerControl, setPlaying, recordingOptions}: {
         pauseEventListener: () => setPlaying(false)
     }
     const [audio, setAudioSrc] = useAudio(audioProps)
+
     useEffect(() => {
         createAudio(recordingOptions)
-            .then((s) => setAudioSrc(s))
+            .then(getAudioSrc)
+            .then(setAudioSrc)
     }, [recordingOptions, setAudioSrc])
 
     playerControl.play = () => audio.play();
@@ -35,8 +37,14 @@ export function AudioSource({playerControl, setPlaying, recordingOptions}: {
     return <></>
 }
 
+function getAudioSrc(buffer: Tone.ToneAudioBuffer) {
+    const blobData = toWav(buffer)
+    const blob = new Blob([blobData], {type: 'audio/wav'})
+    return window.URL.createObjectURL(blob)
+}
 
-async function createAudio(recordingOptions: RecordingOptions): Promise<string> {
+
+async function createAudio(recordingOptions: RecordingOptions): Promise<Tone.ToneAudioBuffer> {
     const context = new Tone.OfflineContext(2, recordingOptions.duration, 41000)
     Tone.setContext(context)
     const synth = createSynth()
@@ -45,9 +53,7 @@ async function createAudio(recordingOptions: RecordingOptions): Promise<string> 
     return context.render()
         .then((buffer) => {
             context.dispose()
-            const blobData = toWav(buffer)
-            const blob = new Blob([blobData], {type: 'audio/wav'})
-            return window.URL.createObjectURL(blob)
+            return buffer
         }
     )
 }
