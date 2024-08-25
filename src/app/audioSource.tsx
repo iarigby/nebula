@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import * as Tone from "tone";
 import * as toWav from "audiobuffer-to-wav"
 
@@ -18,10 +18,15 @@ export function AudioSource({playerControl, setPlaying}: {
         audio.addEventListener('play', () => setPlaying(true))
         audio.addEventListener('pause', () => setPlaying(false))
     }, [audio, setPlaying])
+    const [source, setSource] = useState<string>();
     useEffect(() => {
-        createSource().then((source) => audio.src = source)
-    }, [audio])
-
+        createSource().then((s) => setSource(s))
+    }, [setSource])
+    useEffect(() => {
+        if (source) {
+            audio.src = source
+        }
+    }, [source, audio])
     playerControl.play = () => audio.play();
     playerControl.pause = () => audio.pause();
 
