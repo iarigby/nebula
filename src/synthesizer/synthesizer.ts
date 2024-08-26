@@ -6,9 +6,9 @@ import {FilterOptions} from "tone";
 export async function renderRecording(recordingOptions: RecordingOptions, synthOptions: SynthOptions): Promise<Tone.ToneAudioBuffer> {
     const context = new Tone.OfflineContext(2, recordingOptions.duration, 41000)
     Tone.setContext(context)
-    const [synth, ] = createSynth({context}, synthOptions)
+    const [synth, filter] = createSynth({context}, synthOptions)
     context.transport.start()
-    synth.triggerAttack()
+    addPlayBack(synth, filter)
     return context.render()
         .then((buffer) => {
                 context.dispose()
@@ -38,4 +38,8 @@ export function createSynth(contextOptions?: ContextOptions, synthOptions?: Synt
     const synth = new Tone.NoiseSynth({...contextOptions, envelope: {sustain: 1}}).toDestination();
     synth.connect(filter);
     return [synth, filter]
+}
+
+export function addPlayBack(synth: Tone.NoiseSynth, filter: Tone.Filter) {
+    synth.triggerAttack()
 }
