@@ -15,12 +15,9 @@ export default function Synth({setSynthOptions}: {setSynthOptions:  Dispatch<Set
     if (!synth || !filter || !ready) return <>loading</>;
 
     const triggerAttack = () => synth.triggerAttackRelease(1)
-    const updateFilterFrequency = (f: number) => {
-        setFilterFrequency(f)
-        filter.set({frequency: f})
-    }
-    const increaseFilterFrequency = () => updateFilterFrequency( Math.min(filterFrequency + 50, 24000))
-    const decreaseFilterFrequency = () => updateFilterFrequency(Math.max(filterFrequency - 50, 0))
+
+    const increaseFilterFrequency = () => setFilterFrequency( Math.min(filterFrequency + 50, 24000))
+    const decreaseFilterFrequency = () => setFilterFrequency(Math.max(filterFrequency - 50, 0))
 
     return <div>
         <div>

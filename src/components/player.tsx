@@ -6,7 +6,7 @@ import {useAudio} from "@/hooks/useAudio";
 import {RecordingOptions, renderAudio} from "@/synthesizer/audio";
 import PlayerController from "@/components/playerController";
 import Synth from "@/components/synth";
-import {defaultOptions} from "@/synthesizer/synthesizer";
+import {defaultOptions, SynthOptions} from "@/synthesizer/synthesizer";
 
 
 /**
@@ -15,7 +15,7 @@ import {defaultOptions} from "@/synthesizer/synthesizer";
  */
 export default function Player() {
     const [recordingOptions, setRecordingOptions] = useState({duration: 1})
-    const [synthOptions, setSynthOptions] = useState(defaultOptions)
+    const [synthOptions, setSynthOptions] = useState<SynthOptions>(defaultOptions)
     const [playing, setPlaying] = useState(false);
     const playEventListener = useCallback(() => setPlaying(true), [setPlaying])
     const pauseEventListener = useCallback(() => setPlaying(false), [setPlaying])
