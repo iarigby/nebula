@@ -1,17 +1,16 @@
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import * as Tone from "tone";
 import {useSynth} from "@/hooks/useSynth";
 import {defaultOptions, SynthOptions} from "@/synthesizer/synthesizer";
 
 
-export default function Synth() {
+export default function Synth({setSynthOptions}: {setSynthOptions:  Dispatch<SetStateAction<SynthOptions>>}) {
     const [context, ] = useState<Tone.Context>(() => new Tone.Context())
 
-    const [filterFrequency, setFilterFrequency] = useState<number>(defaultOptions.filter.frequency)
+    const [filterFrequency, setFilterFrequency] = useState<number>(defaultOptions.filter!.frequency)
 
     const synthOptions: SynthOptions = {filter: {frequency: filterFrequency}}
     const [synth, filter, ready] = useSynth(context, synthOptions)
-
 
     if (!synth || !filter || !ready) return <>loading</>;
 
@@ -30,5 +29,6 @@ export default function Synth() {
             <button onClick={decreaseFilterFrequency}>decrease</button>
         </div>
         <button onClick={triggerAttack}>make some noise!</button>
+        <button onClick={() => setSynthOptions(synthOptions)}>save these settings for audio</button>
     </div>
 }

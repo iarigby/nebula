@@ -11,6 +11,9 @@ export function useSynth(context: Tone.Context, synthOptions: SynthOptions): [To
             setInstruments(instruments)
             Tone.start().then(() => setReady(true))
         }
+        // synthOptions is not in the dependency array as the synth should not be recreated when options change
+        // tonejs has a separate interface for that
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [context])
     return [...instruments, ready]
 }

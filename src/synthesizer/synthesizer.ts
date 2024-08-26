@@ -2,10 +2,10 @@ import * as Tone from "tone";
 import {RecordingOptions} from "@/synthesizer/audio";
 
 
-export async function renderRecording(recordingOptions: RecordingOptions): Promise<Tone.ToneAudioBuffer> {
+export async function renderRecording(recordingOptions: RecordingOptions, synthOptions: SynthOptions): Promise<Tone.ToneAudioBuffer> {
     const context = new Tone.OfflineContext(2, recordingOptions.duration, 41000)
     Tone.setContext(context)
-    const [synth, ] = createSynth({context})
+    const [synth, ] = createSynth({context}, synthOptions)
     context.transport.start()
     synth.triggerAttack()
     return context.render()
@@ -27,7 +27,7 @@ export interface ContextOptions {
     context?: Tone.Context
 }
 
-export const defaultOptions = {
+export const defaultOptions: SynthOptions = {
     filter: {
         frequency: 50
     }

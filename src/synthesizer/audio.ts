@@ -1,4 +1,4 @@
-import {renderRecording} from "@/synthesizer/synthesizer";
+import {renderRecording, SynthOptions} from "@/synthesizer/synthesizer";
 import * as Tone from "tone";
 import toWav from "audiobuffer-to-wav";
 
@@ -8,11 +8,13 @@ export type RecordingOptions = {duration: number, context?: Tone.Context}
 /**
  * creates a Tone.context, renders synthesizer notes, converts it to wav and returns a blob for src
  * @param recordingOptions
+ * @param synthOptions
  * @param setAudioSrc
  */
 export function renderAudio(recordingOptions: RecordingOptions,
+                     synthOptions: SynthOptions,
                      setAudioSrc: (s: string) => void) {
-    renderRecording(recordingOptions)
+    renderRecording(recordingOptions, synthOptions)
         .then(createAudioSrc)
         .then(setAudioSrc)
 }
