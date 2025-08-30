@@ -3,7 +3,7 @@ import * as Tone from "tone";
 import {createSynth, SynthOptions} from "@/synthesizer/synthesizer";
 import {FilterOptions} from "tone";
 
-export function useSynth(context: Tone.Context, options: SynthOptions): [Tone.NoiseSynth | undefined, Tone.Filter | undefined, boolean] {
+export function useSynth(context: Tone.Context, options?: SynthOptions): [Tone.NoiseSynth | undefined, Tone.Filter | undefined, boolean] {
     const [instruments, setInstruments] = useState<[Tone.NoiseSynth | undefined, Tone.Filter | undefined]>([undefined, undefined])
     const [ready, setReady] = React.useState(false)
     useEffect(() => {
@@ -11,9 +11,8 @@ export function useSynth(context: Tone.Context, options: SynthOptions): [Tone.No
             if (instruments[0] === undefined) {
                 const inst = createSynth({context: context}, options)
                 setInstruments(inst)
-                Tone.start().then(() => setReady(true))
             } else {
-                updateFilterValues(instruments[1], options.filter)
+                updateFilterValues(instruments[1], options?.filter)
             }
         }
     }, [context, options, instruments])

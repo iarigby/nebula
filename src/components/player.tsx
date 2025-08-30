@@ -29,7 +29,7 @@ export default function Player() {
     return <div className="h-96 w-96">
         <Wave/>
         <PlayerController audio={audio} playing={playing}/>
-        <Synth setSynthOptions={setSynthOptions}/>
+        <Synth duration={recordingOptions.duration} setSynthOptions={setSynthOptions}/>
         <RecordingOptionComponent options={recordingOptions} setOptions={setRecordingOptions}></RecordingOptionComponent>
     </div>
 }
